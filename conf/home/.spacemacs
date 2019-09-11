@@ -47,17 +47,17 @@ This function should only modify configuration layer settings."
      ;; multiple-cursors
      (org :variables
           org-agenda-files (directory-files-recursively "~/org" "\.org$")
-          org-cliplink-max-length 256)
+          org-cliplink-max-length 256
+          org-enable-github-support t)
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      ;; spell-checking
      ;; syntax-checking
-     ;; treemacs
+     treemacs
      ;; version-control
 
      ivy
-     neotree
      github
      )
 
