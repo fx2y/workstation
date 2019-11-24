@@ -9,4 +9,14 @@ sudo apt autoremove -y
 
 git -C ~/.emacs.d pull --rebase
 
-bash-it update
+asdf update
+asdf plugin-update --all
+
+rustup self update
+rustup self upgrade-data
+rustup update
+
+#sdk selfupdate
+#sdk upgrade
+
+#bash-it update

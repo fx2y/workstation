@@ -8,7 +8,7 @@ sudo apt-get install -y \
      rsync
 
 gsettings set org.gnome.desktop.interface enable-animations false
-gsettings set org.gnome.SessionManager logout-prompt false
+gsettings set org.gnome.sessionmanager logout-prompt false
 
 rsync -avr conf/home/.config/ ~/.config
 
