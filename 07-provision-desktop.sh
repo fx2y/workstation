@@ -38,6 +38,22 @@ sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /opt/fir
 sudo update-alternatives --set x-www-browser /opt/firefox/firefox
 rsync -avr conf/opt/firefox/ /opt/firefox
 
+# [CanvasBlocker](https://addons.mozilla.org/en-US/firefox/addon/canvasblocker/)
+# [uBlock Origin](https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/)
+# [Cookie AutoDelete](https://addons.mozilla.org/en-US/firefox/addon/cookie-autodelete/)
+# [HTTPS EVERYWHERE](https://www.eff.org/files/https-everywhere-latest.xpi)
+# [Decentraleyes](https://addons.mozilla.org/firefox/addon/decentraleyes/)
+# [Terms of Service; Didn't Read](https://addons.mozilla.org/en-US/firefox/addon/terms-of-service-didnt-read/)
+# [Privacy Badger](https://www.eff.org/privacybadger)
+# [ClearURLs](https://addons.mozilla.org/en-US/firefox/addon/clearurls/)
+# [Neat URL](https://addons.mozilla.org/en-US/firefox/addon/neat-url/)
+# [Bitwarden](https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/)
+# [Org Capture](https://addons.mozilla.org/en-US/firefox/addon/org-capture/)
+# [Invidition](https://addons.mozilla.org/en-US/android/addon/invidition/)
+# [Bypass Paywalls](https://github.com/iamadamdev/bypass-paywalls-firefox)
+# [Cookie Remover](https://addons.mozilla.org/en-US/firefox/addon/cookie-remover/)
+# [Tree Style Tab](https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/)
+
 # Visual Studio Code Insiders
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
 sudo install -o root -g root -m 644 packages.microsoft.gpg /usr/share/keyrings/
