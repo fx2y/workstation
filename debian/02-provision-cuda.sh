@@ -4,7 +4,7 @@
 
 sudo apt-get update
 sudo apt-get install -y \
-     nvidia-driver \
-     libcuda1
+  nvidia-driver \
+  libcuda1
 sudo apt autoremove -y
 sudo reboot

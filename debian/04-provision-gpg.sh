@@ -4,11 +4,12 @@
 
 sudo apt-get update
 sudo apt-get install -y \
-     gnupg2 \
-     gnupg-agent \
-     openssh-client
+  gnupg2 \
+  gnupg-agent \
+  openssh-client
 
-echo "Disable your network connection."; read
+echo "Disable your network connection."
+read
 gpg -K
 
 cat <<EOF | tee ~/.gnupg/gpg.conf >/dev/null
@@ -33,17 +34,21 @@ throw-keyids
 use-agent
 EOF
 
-echo "Insert your subkeys backup drive."; read
-echo "Input the Device ID of your subkeys backup drive:"; read DEVICEID
+echo "Insert your subkeys backup drive."
+read
+echo "Input the Device ID of your subkeys backup drive:"
+read DEVICEID
 sudo cryptsetup luksOpen ${DEVICEID}1 usb
 sudo mkdir /mnt/encrypted-usb
 sudo mount /dev/mapper/usb /mnt/encrypted-usb
 gpg --import /mnt/encrypted-usb/sub.key
 sudo umount /mnt/encrypted-usb
 sudo cryptsetup luksClose usb
-echo "Remove your subkeys backup drive."; read
+echo "Remove your subkeys backup drive."
+read
 
-echo "KEYID can be retrieved from 'rsa4096/xxx'. Please input your KEYID."; read LOCALKEYID
+echo "KEYID can be retrieved from 'rsa4096/xxx'. Please input your KEYID."
+read LOCALKEYID
 export KEYID=$LOCALKEYID
 
 echo "gpg> trust"
@@ -63,9 +68,9 @@ export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
 
-echo 'export GPG_TTY="$(tty)"' >> ~/.bashrc.local
-echo 'export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)' >> ~/.bashrc.local
-echo 'gpgconf --launch gpg-agent' >> ~/.bashrc.local
+echo 'export GPG_TTY="$(tty)"' >>~/.bashrc.local
+echo 'export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)' >>~/.bashrc.local
+echo 'gpgconf --launch gpg-agent' >>~/.bashrc.local
 
 ssh-add -L
 

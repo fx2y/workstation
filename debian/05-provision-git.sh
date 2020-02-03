@@ -4,9 +4,9 @@
 
 sudo apt update
 sudo apt install -y \
-     git \
-     hub \
-     icdiff
+  git \
+  hub \
+  icdiff
 
 cat <<EOF | tee ~/.gitconfig >/dev/null
 [alias]
@@ -80,8 +80,10 @@ cat <<EOF | tee ~/.gitconfig >/dev/null
 
 EOF
 
-echo "Git User Email: "; read GitUserEmail
-echo "Git User Name: "; read GitUserName
+echo "Git User Email: "
+read GitUserEmail
+echo "Git User Name: "
+read GitUserName
 
 git config --global user.email $GitUserEmail
 git config --global user.name $GitUserName

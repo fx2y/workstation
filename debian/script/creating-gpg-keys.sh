@@ -4,8 +4,8 @@
 
 sudo apt-get update
 sudo apt-get install -y \
-     gnupg2 \
-     secure-delete
+  gnupg2 \
+  secure-delete
 
 export GNUPGHOME=$(mktemp -d)
 
@@ -31,7 +31,8 @@ throw-keyids
 use-agent
 EOF
 
-echo "Please Disable networking for the remainder of the setup..."; read
+echo "Please Disable networking for the remainder of the setup..."
+read
 
 echo "Please select what kind of key you want: (8) RSA (set your own capabilities)"
 echo "(E) Toggle the encrypt capability"
@@ -41,7 +42,8 @@ echo "RSA keys may be between 1024 and 4096 bits long. What keysize do you want?
 echo "Please specify how long the key should be valid. Key is valid for? 0 = key does not expire"
 gpg --expert --full-generate-key
 
-echo "KEYID can be retrieved from 'rsa4096/xxx'. Please input your KEYID."; read LOCALKEYID
+echo "KEYID can be retrieved from 'rsa4096/xxx'. Please input your KEYID."
+read LOCALKEYID
 export KEYID=$LOCALKEYID
 
 echo "gpg> addkey"
@@ -65,14 +67,15 @@ gpg --expert --edit-key $KEYID
 
 gpg -K
 
-gpg --armor --export-secret-keys $KEYID > $GNUPGHOME/mastersub.key
-gpg --armor --export-secret-subkeys $KEYID > $GNUPGHOME/sub.key
+gpg --armor --export-secret-keys $KEYID >$GNUPGHOME/mastersub.key
+gpg --armor --export-secret-subkeys $KEYID >$GNUPGHOME/sub.key
 
 # === Create an encrypted backup of the keyring ===
 
 # Attach another external storage device and check its label:
 sudo dmesg | tail
-echo "Input Device ID: (/dev/sdb)"; read DEVICEID
+echo "Input Device ID: (/dev/sdb)"
+read DEVICEID
 
 # Write it with random data to prepare for encryption:
 sudo dd if=/dev/urandom of=$DEVICEID bs=4M status=progress

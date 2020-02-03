@@ -2,11 +2,16 @@
 
 . util.sh
 
-echo "Input Repository Mirror:"; read Mirror
+echo "Input Repository Mirror:"
+read Mirror
 Mirror=${Mirror:-"deb.debian.org"}
 
-echo "Input OS Version Codename:"; read CodeName
-CodeName=${CodeName:-$(. /etc/os-release;echo $VERSION_CODENAME)}
+echo "Input OS Version Codename:"
+read CodeName
+CodeName=${CodeName:-$(
+  . /etc/os-release
+  echo $VERSION_CODENAME
+)}
 
 cat <<EOF | sudo tee /etc/apt/sources.list >/dev/null
 deb [arch=amd64] http://${Mirror}/debian/ ${CodeName} main non-free contrib

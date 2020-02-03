@@ -28,7 +28,7 @@ nameserver 127.0.2.1
 options edns0 single-request-reopen
 EOF
 
-echo "5. lock system DNS settings. to unlock it run `sudo chattr -i /etc/resolv.conf`"
+echo "5. lock system DNS settings. to unlock it run $(sudo chattr -i /etc/resolv.conf)"
 sudo chattr +i /etc/resolv.conf
 
 echo "6. test"
@@ -38,7 +38,7 @@ echo "=== Installing Privoxy... ==="
 sudo apt-get update
 sudo apt install -y privoxy
 
-echo 'export http_proxy="http://localhost:8118"' >> ~/.bashrc.local
-echo 'export https_proxy="$http_proxy"' >> ~/.bashrc.local
+echo 'export http_proxy="http://localhost:8118"' >>~/.bashrc.local
+echo 'export https_proxy="$http_proxy"' >>~/.bashrc.local
 
 sudo reboot

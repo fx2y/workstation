@@ -3,7 +3,7 @@
 . util.sh
 
 function set_config() {
-    sudo sed -i "s/^\($2\s*=\s*\).*\$/\1$3/" $1
+  sudo sed -i "s/^\($2\s*=\s*\).*\$/\1$3/" $1
 }
 
 sudo apt-get update

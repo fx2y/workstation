@@ -14,8 +14,8 @@ sudo apt-get update
 sudo apt-get install -y git
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 sh -c 'cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)"'
-echo -e '\n. $HOME/.asdf/asdf.sh' >> ~/.bashrc.local
-echo -e '\n. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc.local
+echo -e '\n. $HOME/.asdf/asdf.sh' >>~/.bashrc.local
+echo -e '\n. $HOME/.asdf/completions/asdf.bash' >>~/.bashrc.local
 
 # Erlang
 sudo apt-get -y install build-essential autoconf m4 libncurses5-dev libwxgtk3.0-dev libgl1-mesa-dev libglu1-mesa-dev libpng-dev libssh-dev unixodbc-dev xsltproc fop
