@@ -25,6 +25,7 @@ brews=(
   gnupg
   grep
   icdiff
+  ispell
   libtool
   libxslt
   libyaml
@@ -64,6 +65,7 @@ casks=(
   pycharm
   safari-technology-preview
   spectacle
+  virtualbox
   visual-studio-code
   webstorm
 )
