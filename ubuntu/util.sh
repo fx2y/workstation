@@ -1,40 +1,45 @@
 #!/usr/bin/env bash
 
+source ../shared/util.sh
+
 UBUNTU_NAME=focal
 
-conf_apt() {
+setup_apt() {
 	cat <<EOF | sudo tee /etc/apt/sources.list >/dev/null
-deb mirror://mirrors.ubuntu.com/mirrors.txt ${UBUNTU_NAME} main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt ${UBUNTU_NAME}-updates main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt ${UBUNTU_NAME}-backports main restricted universe multiverse
-deb http://archive.canonical.com/ubuntu ${UBUNTU_NAME} partner
+deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME} main restricted universe multiverse
+deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-updates main restricted universe multiverse
+deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-backports main restricted universe multiverse
+deb http://archive.canonical.com/ubuntu/ ${UBUNTU_NAME} partner
 deb http://security.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-security main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt ${UBUNTU_NAME}-proposed main restricted universe multiverse
+deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-proposed main restricted universe multiverse
 EOF
 }
 
 update_apt() {
 	sudo apt update
-	sudo apt upgrade -y
-	sudo apt autoremove -y
-	sudo apt full-upgrade -y
-	sudo apt-get dist-upgrade -y
-	sudo apt autoremove -y
+	sudo apt upgrade --purge -y
+	sudo apt autoremove --purge -y
+	sudo apt full-upgrade --purge -y
+	sudo apt-get dist-upgrade --purge -y
+	sudo apt autoremove --purge -y
 }
 
-conf_mainline_kernel() {
+setup_mainline_kernel() {
 	wget -P /tmp https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh
 	sudo install /tmp/ubuntu-mainline-kernel.sh /usr/local/bin/
 	rm /tmp/ubuntu-mainline-kernel.sh
 }
 
 update_mainline_kernel() {
-	ubuntu-mainline-kernel.sh -i
+	ubuntu-mainline-kernel.sh -c
+	read -r UNUSED_KERNEL
+	ubuntu-mainline-kernel.sh -i --yes
+	ubuntu-mainline-kernel.sh -u $UNUSED_KERNEL
 }
 
 delete_unused_kernel() {
 	ubuntu-mainline-kernel.sh -l
-	read $UNUSED_KERNEL
+	read -r UNUSED_KERNEL
 	ubuntu-mainline-kernel.sh -u $UNUSED_KERNEL
 }
 
@@ -104,14 +109,14 @@ net.core.default_qdisc = cake
 net.ipv4.tcp_congestion_control = bbr
 
 # TCP SYN cookie protection
-net.ipv4.tcp_syncookies = 1
+#net.ipv4.tcp_syncookies = 1
 
 # TCP rfc1337
-net.ipv4.tcp_rfc1337 = 1
+#net.ipv4.tcp_rfc1337 = 1
 
 # Reverse path filtering
-net.ipv4.conf.default.rp_filter = 1
-net.ipv4.conf.all.rp_filter = 1
+#net.ipv4.conf.default.rp_filter = 1
+#net.ipv4.conf.all.rp_filter = 1
 
 # (WARN) Log martian packets
 #net.ipv4.conf.default.log_martians = 1
@@ -132,16 +137,15 @@ net.ipv4.conf.default.send_redirects = 0
 #net.ipv6.icmp.echo_ignore_all = 1
 
 # Allow unprivileged users to create IPPROTO_ICMP sockets
-net.ipv4.ping_group_range = 100 100
-net.ipv4.ping_group_range = 0 65535
+#net.ipv4.ping_group_range = 0 65535
 EOF
 
 	cat <<EOF | sudo tee /etc/udev/rules.d/10-network.rules >/dev/null
 ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", ATTR{mtu}="1500", ATTR{tx_queue_len}="2000"
 EOF
 
-	sudo mkdir -p /etc/modules-load.d/99-optim-net.conf >/dev/null
-	cat <<EOF
+	sudo mkdir -p /etc/modules-load.d
+	cat <<EOF | sudo tee /etc/modules-load.d/99-optim-net.conf >/dev/null
 br_netfilter
 tcp_bbr
 EOF
@@ -183,7 +187,7 @@ EOF
 }
 
 optim_misc_kernel() {
-	cat <<EOF
+	cat <<EOF | sudo tee /etc/sysctl.d/99-optim-misc.conf >/dev/null
 kernel.printk = 3 3 3 3
 EOF
 }
@@ -191,4 +195,74 @@ EOF
 setup_nvidia_driver() {
 	sudo add-apt-repository ppa:graphics-drivers/ppa
 	sudo ubuntu-drivers autoinstall
+	sudo apt install -y nvidia-dkms-440
+}
+
+setup_tools() {
+	sudo apt install -y \
+		bash \
+		curl \
+		tmux \
+		vim \
+		ssh \
+		dnscrypt-proxy \
+		gnupg \
+		git
+	shared_setup_tools
+	shared_setup_bashit
+	shared_setup_ssh
+	shared_setup_sshd
+	shared_setup_gnupg
+	shared_setup_git
+}
+
+setup_wakeonlan() {
+	ip link
+	nmcli c show
+	sudo nmcli c modify "Wired connection 1" 802-3-ethernet.wake-on-lan magic
+}
+
+setup_microk8s() {
+	sudo snap install microk8s --classic
+	sudo usermod -a -G microk8s $USER
+	sudo chown -f -R $USER ~/.kube
+}
+
+setup_doom_emacs() {
+	sudo add-apt-repository ppa:ubuntu-elisp/ppa
+	sudo apt update
+	sudo apt install -y git \
+                ripgrep \
+                tar \
+                fd-find \
+                clang \
+								emacs-snapshot
+	shared_setup_doom_emacs
+}
+
+setup_asdf() {
+	sudo apt install -y \
+		automake autoconf libreadline-dev \
+		libncurses-dev libssl-dev libyaml-dev \
+		libxslt-dev libffi-dev libtool unixodbc-dev \
+		unzip curl
+	shared_setup_asdf
+}
+
+setup_dnscrypt_proxy() {
+	sudo systemctl stop systemd-resolved
+	sudo systemctl disable systemd-resolved
+	sudo apt remove --purge -u resolvconf
+	cat <<EOF | sudo tee /etc/resolv.conf
+nameserver 127.0.2.1
+options edns0
+EOF
+}
+
+setup_brave() {
+	sudo apt install -y apt-transport-https curl
+	curl -s https://brave-browser-apt-beta.s3.brave.com/brave-core-nightly.asc | sudo apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-prerelease.gpg add -
+	echo "deb [arch=amd64] https://brave-browser-apt-beta.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-beta.list
+	sudo apt update
+	sudo apt install -y brave-browser-beta
 }
