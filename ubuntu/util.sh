@@ -195,7 +195,9 @@ EOF
 setup_nvidia_driver() {
   sudo add-apt-repository ppa:graphics-drivers/ppa
   sudo ubuntu-drivers autoinstall
-  sudo apt install -y nvidia-dkms-440
+  echo "Read NVIDIA Driver Version: [440]"
+  read -r NV_DRIVER_VERSION
+  sudo apt install -y nvidia-dkms-"$NV_DRIVER_VERSION"
 }
 
 setup_tools() {
@@ -212,6 +214,7 @@ setup_tools() {
   shared_setup_bashit
   shared_setup_ssh
   shared_setup_sshd
+  setup_dnscrypt_proxy
   shared_setup_gnupg
   shared_setup_git
 }
@@ -252,11 +255,28 @@ setup_asdf() {
 setup_dnscrypt_proxy() {
   sudo systemctl stop systemd-resolved
   sudo systemctl disable systemd-resolved
-  sudo apt remove --purge -u resolvconf
+  sudo apt remove --purge -y resolvconf
   cat <<EOF | sudo tee /etc/resolv.conf
 nameserver 127.0.2.1
 options edns0
 EOF
+  cat <<EOF
+block_ipv6 = true
+ipv6_servers = false
+cache = true
+cache_size = 4096
+cache_min_ttl = 2400
+cache_max_ttl = 86400
+cache_neg_min_ttl = 60
+cache_neg_max_ttl = 600
+EOF
+  echo "Wait"
+  read -r
+  sudo vi /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+  sudo systemctl restart NetworkManager
+  sudo systemctl restart dnscrypt-proxy
+  dnscrypt-proxy -resolve reddit.com
+  dig dnscrypt.info | grep SERVER
 }
 
 setup_brave() {
