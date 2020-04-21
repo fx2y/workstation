@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 shared_setup_tools() {
   wget -qO ~/.curlrc https://raw.githubusercontent.com/drduh/config/master/curlrc
   wget -qO ~/.tmux.conf https://raw.githubusercontent.com/drduh/config/master/tmux.conf
@@ -29,7 +31,7 @@ shared_setup_sshd() {
 shared_setup_conda() {
   CONDA_OS=${1:-"Linux"}
   wget -qO /tmp/conda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-"$CONDA_OS"-x86_64.sh
-  (cd /tmp && bash conda.sh -b)
+  (cd /tmp && bash conda.sh -b && ~/miniconda3/bin/conda init)
   echo "export PATH=\"\$HOME/miniconda3/bin:\$PATH\"" >>~/.bash_profile.local
 }
 

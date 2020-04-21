@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ../shared/util.sh
+. ../shared/util.sh
 
 UBUNTU_NAME=focal
 
@@ -260,6 +260,7 @@ setup_dnscrypt_proxy() {
 nameserver 127.0.2.1
 options edns0
 EOF
+  sudo chattr +i /etc/resolv.conf
   cat <<EOF
 block_ipv6 = true
 ipv6_servers = false
@@ -277,6 +278,23 @@ EOF
   sudo systemctl restart dnscrypt-proxy
   dnscrypt-proxy -resolve reddit.com
   dig dnscrypt.info | grep SERVER
+}
+
+setup_conda() {
+  shared_setup_conda
+  conda install -y pytorch torchvision cudatoolkit=10.2 -c pytorch
+}
+
+setup_syncthing() {
+  sudo apt install -y syncthing
+}
+
+setup_jetbrains() {
+  sudo snap install pycharm-professional --classic
+  sudo snap install clion --classic
+  sudo snap install webstorm --classic
+  sudo snap install goland --classic
+  sudo snap install datagrip --classic
 }
 
 setup_brave() {
