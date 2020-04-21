@@ -100,8 +100,7 @@ ignite_setup() {
   mkdir -p /tmp/ignite
   for binary in "${BINARIES[@]}"; do
     curl -sfLo "/tmp/ignite/$binary" "https://github.com/weaveworks/ignite/releases/download/${VERSION}/${binary}-${GOARCH}"
-    chmod +x "$binary"
-    sudo mv "$binary" /usr/local/bin
+    (cd /tmp/ignite && chmod +x "$binary" && sudo mv "$binary" /usr/local/bin)
   done
   ignite version
 }
