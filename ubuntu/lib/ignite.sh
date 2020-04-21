@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 setup_ignite() {
   # Prerequisite
   ignite_sysctl_net
@@ -54,7 +56,7 @@ setup_docker() {
     echo "$ID$VERSION_ID"
   )
   curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-  curl -s -L "https://nvidia.github.io/nvidia-docker/$distribution/amd64/nvidia-docker.list" | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+  curl -s -L "https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list" | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
   sudo apt update
   sudo apt install -y nvidia-container-runtime
 
@@ -118,7 +120,7 @@ setup_wksctl() {
   mkdir -p /tmp/wksctl
   curl -sfLo /tmp/wksctl/wksctl.tar.gz https://github.com/weaveworks/wksctl/releases/download/v$VERSION/wksctl-$VERSION-linux-x86_64.tar.gz
   sudo mkdir -p /usr/local/etc/wksctl
-  (cd /tmp/wksctl && tar xfz wksctl.tar.gz && chmod +x wksctl && sudo mv wksctl /usr/local/bin/ && sudo mv examples/ /usr/local/etc/wksctl/)
+  (cd /tmp/wksctl && tar xfz wksctl.tar.gz && chmod +x wksctl && sudo mv wksctl /usr/local/bin/ && sudo mv -f examples/ /usr/local/etc/wksctl/)
   wksctl version
 }
 
