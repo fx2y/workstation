@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 setup_ignite() {
   # Prerequisite
   ignite_sysctl_net
@@ -99,6 +97,7 @@ ignite_setup() {
   VERSION=v0.6.3
   GOARCH=$(go env GOARCH 2>/dev/null || echo "amd64")
   BINARIES=(ignite ignited)
+  mkdir -p /tmp/ignite
   for binary in "${BINARIES[@]}"; do
     curl -sfLo "/tmp/ignite/$binary" "https://github.com/weaveworks/ignite/releases/download/${VERSION}/${binary}-${GOARCH}"
     chmod +x "$binary"
@@ -120,7 +119,7 @@ setup_wksctl() {
   mkdir -p /tmp/wksctl
   curl -sfLo /tmp/wksctl/wksctl.tar.gz https://github.com/weaveworks/wksctl/releases/download/v$VERSION/wksctl-$VERSION-linux-x86_64.tar.gz
   sudo mkdir -p /usr/local/etc/wksctl
-  (cd /tmp/wksctl && tar xfz wksctl.tar.gz && chmod +x wksctl && sudo mv wksctl /usr/local/bin/ && sudo mv -f examples/ /usr/local/etc/wksctl/)
+  (cd /tmp/wksctl && tar xfz wksctl.tar.gz && chmod +x wksctl && sudo mv wksctl /usr/local/bin/ && sudo rm -rf /usr/local/etc/wksctl/examples && sudo mv -f examples/ /usr/local/etc/wksctl/)
   wksctl version
 }
 
