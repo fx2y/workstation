@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 setup_ignite() {
-  # Prerequisite
   ignite_sysctl_net
   ignite_modprobe
   disable_swap
@@ -28,7 +27,7 @@ ignite_modprobe() {
   cat <<EOT | sudo bash -c "cat > /etc/modules-load.d/ignite.conf"
 loop
 EOT
-  sudo modprobe -v loop
+  modprobe -v loop
 }
 
 disable_swap() {
