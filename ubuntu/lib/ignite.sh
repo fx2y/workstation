@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-setup_ignite() {
+setup_cloud_native() {
   ignite_sysctl_net
   ignite_modprobe
   disable_swap
@@ -8,7 +8,7 @@ setup_ignite() {
   setup_docker
   setup_cni
   ignite_setup_other_bin
-  ignite_setup
+  setup_ignite
   setup_footloose
   setup_wksctl
 }
@@ -92,7 +92,7 @@ ignite_setup_other_bin() {
     git
 }
 
-ignite_setup() {
+setup_ignite() {
   VERSION=v0.6.3
   GOARCH=$(go env GOARCH 2>/dev/null || echo "amd64")
   BINARIES=(ignite ignited)

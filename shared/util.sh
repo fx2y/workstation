@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 shared_setup_tools() {
   wget -qO ~/.curlrc https://raw.githubusercontent.com/drduh/config/master/curlrc
   wget -qO ~/.tmux.conf https://raw.githubusercontent.com/drduh/config/master/tmux.conf
