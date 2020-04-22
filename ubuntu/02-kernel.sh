@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 . functions.sh
+. ../shared/runtime.sh
 
 optim_kernel
 optim_net_kernel

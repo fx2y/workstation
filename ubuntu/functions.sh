@@ -304,3 +304,59 @@ setup_brave() {
   sudo apt update
   sudo apt install -y brave-browser-beta
 }
+
+setup_gnome() {
+  sudo apt update
+  sudo apt install -y \
+    fonts-noto \
+    gnome-shell-extension-autohidetopbar
+  gsettings set org.gnome.desktop.interface enable-animations false
+  gsettings set org.gnome.sessionmanager logout-prompt false
+  echo "Read Windows Fonts Directory: [/media/$USER/EMPTIED/WindowsFonts]"
+  read -r FONTS_BAK
+  mkdir -p /usr/share/fonts/WindowsFonts
+  sudo cp "$FONTS_BAK"/* /usr/share/fonts/WindowsFonts/
+  (cd /usr/share/fonts/WindowsFonts && sudo cp ./*.ttf ./*.TTF /usr/share/fonts/truetype/)
+  cat <<EOF | sudo tee -a /etc/fonts/conf.d/30-metric-aliases-free.conf >/dev/null
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+       <alias binding="same">
+         <family>Helvetica</family>
+         <accept>
+         <family>Arial</family>
+         </accept>
+       </alias>
+       <alias binding="same">
+         <family>Times</family>
+         <accept>
+         <family>Times New Roman</family>
+         </accept>
+       </alias>
+       <alias binding="same">
+         <family>Courier</family>
+         <accept>
+         <family>Courier New</family>
+         </accept>
+       </alias>
+</fontconfig>
+EOF
+  fc-cache -f
+  cat <<EOF
+# Tweaks > Auto Hide Top Bar: True
+#        > Font > Hinting: Slight
+#               > Anti-aliasing: Subpixel
+#               > Interface: Noto Sans Display Regular, 10
+#               > Document: Noto Serif Regular, 11
+#               > Monospace: Noto Mono Regular, 13
+#               > Window: Noto Sans Display Regular, 11
+# Jetbrains > Settings > Editor > Font > Ubuntu Mono, 18, Line spacing: 1.4
+EOF
+  read -r
+  echo "alias chrome='brave-browser-beta --incognito --disable-font-subpixel-positioning'" >>~/.bash_profile.local
+  cat <<EOF
+  # sudo vi /usr/share/applications/brave-browser-beta.desktop
+  # Exec=brave-browser-beta --incognito --disable-font-subpixel-positioning
+EOF
+  read -r
+}
