@@ -5,14 +5,18 @@
 UBUNTU_NAME=focal
 
 setup_apt() {
+  wget -qO - mirrors.ubuntu.com/mirrors.txt
+  echo "Ubuntu Mirror:"
+  read -r UBUNTU_MIRROR
   cat <<EOF | sudo tee /etc/apt/sources.list >/dev/null
-deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME} main restricted universe multiverse
-deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-updates main restricted universe multiverse
-deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-backports main restricted universe multiverse
-deb http://archive.canonical.com/ubuntu/ ${UBUNTU_NAME} partner
-deb http://security.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-security main restricted universe multiverse
-deb http://id.archive.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-proposed main restricted universe multiverse
+deb ${UBUNTU_MIRROR} ${UBUNTU_NAME} main restricted universe multiverse
+deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-updates main restricted universe multiverse
+deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-backports main restricted universe multiverse
+deb ${UBUNTU_MIRROR} ${UBUNTU_NAME} partner
+deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-security main restricted universe multiverse
+deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-proposed main restricted universe multiverse
 EOF
+  update_apt
 }
 
 update_apt() {
@@ -28,13 +32,14 @@ setup_mainline_kernel() {
   wget -P /tmp https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh
   sudo install /tmp/ubuntu-mainline-kernel.sh /usr/local/bin/
   rm /tmp/ubuntu-mainline-kernel.sh
+  sudo ubuntu-mainline-kernel.sh -i --yes
 }
 
 update_mainline_kernel() {
   ubuntu-mainline-kernel.sh -c
   read -r UNUSED_KERNEL
-  ubuntu-mainline-kernel.sh -i --yes
-  ubuntu-mainline-kernel.sh -u "$UNUSED_KERNEL"
+  sudo ubuntu-mainline-kernel.sh -i --yes
+  sudo ubuntu-mainline-kernel.sh -u "$UNUSED_KERNEL"
 }
 
 delete_unused_kernel() {
@@ -195,9 +200,6 @@ EOF
 setup_nvidia_driver() {
   sudo add-apt-repository ppa:graphics-drivers/ppa
   sudo ubuntu-drivers autoinstall
-  echo "Read NVIDIA Driver Version: [440]"
-  read -r NV_DRIVER_VERSION
-  sudo apt install -y nvidia-dkms-"$NV_DRIVER_VERSION"
 }
 
 setup_tools() {
@@ -256,6 +258,7 @@ setup_dnscrypt_proxy() {
   sudo systemctl stop systemd-resolved
   sudo systemctl disable systemd-resolved
   sudo apt remove --purge -y resolvconf
+  sudo rm -rf /etc/resolv.conf
   cat <<EOF | sudo tee /etc/resolv.conf
 nameserver 127.0.2.1
 options edns0

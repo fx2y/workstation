@@ -4,5 +4,3 @@
 . ../shared/runtime.sh
 
 setup_apt
-update_apt
-sudo reboot
