@@ -314,10 +314,9 @@ setup_gnome() {
     fonts-noto \
     gnome-shell-extension-autohidetopbar
   gsettings set org.gnome.desktop.interface enable-animations false
-  gsettings set org.gnome.sessionmanager logout-prompt false
   echo "Read Windows Fonts Directory: [/media/$USER/EMPTIED/WindowsFonts]"
   read -r FONTS_BAK
-  mkdir -p /usr/share/fonts/WindowsFonts
+  sudo mkdir -p /usr/share/fonts/WindowsFonts
   sudo cp "$FONTS_BAK"/* /usr/share/fonts/WindowsFonts/
   (cd /usr/share/fonts/WindowsFonts && sudo cp ./*.ttf ./*.TTF /usr/share/fonts/truetype/)
   cat <<EOF | sudo tee -a /etc/fonts/conf.d/30-metric-aliases-free.conf >/dev/null
