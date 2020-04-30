@@ -294,11 +294,13 @@ setup_syncthing() {
 }
 
 setup_jetbrains() {
-  sudo snap install pycharm-professional --classic
-  sudo snap install clion --classic
-  sudo snap install webstorm --classic
-  sudo snap install goland --classic
-  sudo snap install datagrip --classic
+	JETBRAINS_VERSION=1.17.6856
+	wget -P /tmp https://download.jetbrains.com/toolbox/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz
+  tar -xvzf /tmp/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz
+  mkdir -p ~/opt/bin
+  mv /tmp/jetbrains-toolbox-"$JETBRAINS_VERSION"/jetbrain-toolbox ~/opt/bin
+  echo 'export PATH="$HOME/opt/bin:$PATH"' >> ~/.bash_profile.local
+  export PATH="$HOME/opt/bin:$PATH"
 }
 
 setup_brave() {
