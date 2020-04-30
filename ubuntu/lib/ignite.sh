@@ -113,7 +113,7 @@ setup_footloose() {
 }
 
 setup_wksctl() {
-  VERSION=0.8.2-beta.1
+  VERSION=0.8.2-beta.2
   mkdir -p /tmp/wksctl
   curl -sfLo /tmp/wksctl/wksctl.tar.gz https://github.com/weaveworks/wksctl/releases/download/v$VERSION/wksctl-$VERSION-linux-x86_64.tar.gz
   sudo mkdir -p /usr/local/etc/wksctl

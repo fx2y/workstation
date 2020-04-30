@@ -31,18 +31,19 @@ shared_setup_conda() {
   wget -qO /tmp/conda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-"$CONDA_OS"-x86_64.sh
   (cd /tmp && bash conda.sh -b && ~/miniconda3/bin/conda init)
   echo "export PATH=\"\$HOME/miniconda3/bin:\$PATH\"" >>~/.bash_profile.local
+  export PATH="$HOME/miniconda3/bin:$PATH"
 }
 
 # source: https://github.com/Bash-it/bash-it
 shared_setup_bashit() {
   git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
   ~/.bash_it/install.sh --silent
-  BASH_LOCAL="$HOME/.bash_profile.local"
+  BASH_DIR="$HOME/.bash_profile"
   if [ -f ~/.bashrc ]; then
-    BASH_LOCAL="$HOME/.bashrc.local"
+    BASH_DIR="$HOME/.bashrc"
   fi
-  touch "$BASH_LOCAL"
-  cat <<EOF >>"$BASH_LOCAL"
+  touch ~/.bash_profile.local
+  cat <<EOF >>"$BASH_DIR"
 . ~/.bash_profile.local
 EOF
   sudo chsh -s "$(command -v bash)" "$USER"
@@ -57,6 +58,7 @@ shared_setup_gnupg() {
     echo "export GPG_TTY=\"\$(tty)\""
     echo "export SSH_AUTH_SOCK=\$(gpgconf --list-dirs agent-ssh-socket)"
     echo "gpgconf --launch gpg-agent"
+    echo "gpg-connect-agent updatestartuptty /bye >/dev/null"
   } >>~/.bash_profile.local
 
   GPG_TTY="$(tty)"
@@ -64,6 +66,7 @@ shared_setup_gnupg() {
   SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
   export SSH_AUTH_SOCK
   gpgconf --launch gpg-agent
+  gpg-connect-agent updatestartuptty /bye >/dev/null
 
   echo "Disable Internet Connection and Mount Backup Disk"
   read -r
@@ -109,14 +112,14 @@ shared_setup_doom_emacs() {
   ~/.emacs.d/bin/doom install
   vi ~/.doom.d/init.el
   ~/.emacs.d/bin/doom upgrade
-  echo -e "export PATH=\"\$HOME/.emacs.d/bin:\$PATH\"" >>~/.bash_profile.local
+  echo "export PATH=\"\$HOME/.emacs.d/bin:\$PATH\"" >>~/.bash_profile.local
 }
 
 # source: https://asdf-vm.com/#/core-manage-asdf-vm
 shared_setup_asdf() {
   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.8
-  echo -e ". $HOME/.asdf/asdf.sh" >>~/.bash_profile.local
-  echo -e ". $HOME/.asdf/completions/asdf.bash" >>~/.bash_profile.local
+  echo ". \"\$HOME/.asdf/asdf.sh\"" >>~/.bash_profile.local
+  echo ". \"\$HOME/.asdf/completions/asdf.bash\"" >>~/.bash_profile.local
   # shellcheck source=$HOME/.asdf/asdf.sh
   . "$HOME/.asdf/asdf.sh"
 
@@ -140,4 +143,5 @@ shared_setup_asdf() {
 shared_setup_rustup() {
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path --default-toolchain beta --quiet -y
   echo "export PATH=\"\$HOME/.cargo/bin:\$PATH\"" >>~/.bash_profile.local
+  export PATH="$HOME/.cargo/bin:$PATH"
 }

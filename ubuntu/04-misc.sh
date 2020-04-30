@@ -9,9 +9,9 @@ setup_tools
 setup_doom_emacs
 
 setup_conda
-shared_setup_rust
+shared_setup_rustup
 setup_asdf
-setup_cloud_native
+setup_microk8s
 
 setup_jetbrains
 setup_brave

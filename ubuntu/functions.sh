@@ -12,8 +12,8 @@ setup_apt() {
 deb ${UBUNTU_MIRROR} ${UBUNTU_NAME} main restricted universe multiverse
 deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-updates main restricted universe multiverse
 deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-backports main restricted universe multiverse
-deb ${UBUNTU_MIRROR} ${UBUNTU_NAME} partner
-deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-security main restricted universe multiverse
+deb http://archive.canonical.com/ubuntu/ ${UBUNTU_NAME} partner
+deb http://security.ubuntu.com/ubuntu/ ${UBUNTU_NAME}-security main restricted universe multiverse
 deb ${UBUNTU_MIRROR} ${UBUNTU_NAME}-proposed main restricted universe multiverse
 EOF
   update_apt
@@ -42,10 +42,11 @@ update_mainline_kernel() {
   sudo ubuntu-mainline-kernel.sh -u "$UNUSED_KERNEL"
 }
 
-delete_unused_kernel() {
-  ubuntu-mainline-kernel.sh -l
-  read -r UNUSED_KERNEL
-  ubuntu-mainline-kernel.sh -u "$UNUSED_KERNEL"
+delete_old_kernel() {
+  apt list --installed | grep linux-image
+  echo "Linux Kernel: [5.4.0-26]"
+  read -r OLD_KERNEL
+  sudo apt remove --purge linux-headers-"$OLD_KERNEL" linux-modules-"$OLD_KERNEL"-generic
 }
 
 set_config() {
