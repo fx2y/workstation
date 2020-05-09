@@ -6,6 +6,12 @@ shared_setup_tools() {
   wget -qO ~/.vimrc https://raw.githubusercontent.com/drduh/config/master/vimrc
 }
 
+shared_setup_etc_hosts() {
+  sudo mv /etc/hosts /etc/hosts.backup
+  wget -qO - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts | sudo tee /etc/hosts >/dev/null
+  cat /etc/hosts.backup | sudo tee -a /etc/hosts >/dev/null
+}
+
 shared_setup_ssh() {
   mkdir -p ~/.ssh
   wget -qO ~/.ssh/config https://raw.githubusercontent.com/drduh/config/master/ssh_config

@@ -232,6 +232,10 @@ setup_microk8s() {
   sudo snap install microk8s --classic
   sudo usermod -a -G microk8s "$USER"
   sudo chown -f -R "$USER" ~/.kube
+  su - $USER
+  echo "alias kubectl='microk8s kubectl'" >> ~/.bash_profile.local
+  microk8s enable dns helm3 gpu
+  echo "alias helm='microk8s helm3'" >> ~/.bash_profile.local
 }
 
 setup_doom_emacs() {
