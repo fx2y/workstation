@@ -13,7 +13,7 @@ disable_snap() {
   df
   echo "Snap ID:"
   read -r SNAP_ID
-  sudo unmount "/snap/core/$SNAP_ID"
+  sudo umount "/snap/snapd/$SNAP_ID"
   # Remove and purge the snapd package
   sudo apt purge -y snapd
   # Remove any lingering snap directories

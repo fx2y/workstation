@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. ../shared/functions.sh
+
 setup_kernel() {
   optim_kernel
   optim_net_kernel

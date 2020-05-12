@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. ../shared/lib/devbox.sh
+
 setup_devbox() {
   setup_conda
   shared_setup_rustup
@@ -36,11 +38,9 @@ setup_elixir() {
 
 setup_jetbrains() {
   JETBRAINS_VERSION=1.17.6856
-  wget -P /tmp https://download.jetbrains.com/toolbox/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz
-  tar -xvzf /tmp/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz
+  (cd /tmp && wget -qO jetbrains-toolbox.tar.gz https://download.jetbrains.com/toolbox/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz && tar -xvzf jetbrains-toolbox.tar.gz && rm jetbrains-toolbox.tar.gz)
   mkdir -p ~/opt/bin
-  mv /tmp/jetbrains-toolbox-"$JETBRAINS_VERSION"/jetbrain-toolbox ~/opt/bin
-  sudo rm /tmp/jetbrains-toolbox-"$JETBRAINS_VERSION"
+  (cd /tmp && mv jetbrains-toolbox-"$JETBRAINS_VERSION"/jetbrain-toolbox ~/opt/bin && rm -rf jetbrains-toolbox-"$JETBRAINS_VERSION")
   echo "export PATH=\"\$HOME/opt/bin:\$PATH\"" >>~/.bash_profile.local
   export PATH="$HOME/opt/bin:$PATH"
   jetbrains-toolbox

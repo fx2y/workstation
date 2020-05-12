@@ -5,7 +5,6 @@ shared_setup_conda() {
   CONDA_OS=${1:-"Linux"} # Or, MacOSX
   wget -qO /tmp/conda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-"$CONDA_OS"-x86_64.sh
   (cd /tmp && bash conda.sh -b && rm conda.sh && ~/miniconda3/bin/conda init)
-  echo "export PATH=\"\$HOME/miniconda3/bin:\$PATH\"" >>~/.bash_profile.local
   export PATH="$HOME/miniconda3/bin:$PATH"
   cat <<EOF >>~/.condarc
 channels:

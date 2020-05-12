@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+. ../shared/lib/shell.sh
+
 setup_shell() {
-  setup_wakeonlan
   shared_setup_etc_hosts
   setup_tools
   setup_doom_emacs

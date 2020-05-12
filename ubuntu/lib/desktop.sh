@@ -17,7 +17,6 @@ setup_brave() {
   # sudo vi /usr/share/applications/brave-browser-beta.desktop
   # Exec=brave-browser-beta --incognito --disable-font-subpixel-positioning
 EOF
-  brave-browser-beta --incognito --disable-font-subpixel-positioning
   read -r
 }
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-. ../shared/functions.sh
 . lib/apt.sh
 . lib/kernel.sh
 . lib/shell.sh

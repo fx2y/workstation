@@ -3,7 +3,7 @@
 shared_setup_etc_hosts() {
   sudo mv /etc/hosts /etc/hosts.backup
   wget -qO - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts | sudo tee /etc/hosts >/dev/null
-  cmd </etc/hosts.backup | sudo tee -a /etc/hosts >/dev/null
+  cat </etc/hosts.backup | sudo tee -a /etc/hosts >/dev/null
 }
 
 shared_setup_tools() {
@@ -83,6 +83,7 @@ shared_setup_gnupg() {
   gpg --output ~/.ssh/github --export-ssh-key "$KEYID"
   echo "Enable Internet Connection and Mount Backup Disk"
   read -r
+  ssh-add -L
   ssh git@github.com -vvv
 }
 
