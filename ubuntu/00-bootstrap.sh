@@ -3,4 +3,5 @@
 . functions.sh
 . ../shared/runtime.sh
 
+disable_snap
 setup_apt

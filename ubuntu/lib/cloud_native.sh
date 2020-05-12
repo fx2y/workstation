@@ -11,6 +11,7 @@ setup_cloud_native() {
   setup_ignite
   setup_footloose
   setup_wksctl
+  setup_k8s
 }
 
 ignite_sysctl_net() {
@@ -113,7 +114,7 @@ setup_footloose() {
 }
 
 setup_wksctl() {
-  VERSION=0.8.2-beta.2
+  VERSION=0.8.2-beta.5
   mkdir -p /tmp/wksctl
   curl -sfLo /tmp/wksctl/wksctl.tar.gz https://github.com/weaveworks/wksctl/releases/download/v$VERSION/wksctl-$VERSION-linux-x86_64.tar.gz
   sudo mkdir -p /usr/local/etc/wksctl
@@ -125,4 +126,15 @@ remove_ignite() {
   ignite rm -f "$(ignite ps -aq)"
   sudo rm -r /var/lib/firecracker
   sudo rm /usr/local/bin/ignite{,d}
+}
+
+setup_k8s() {
+  sudo apt update
+  sudo apt install -y apt-transport-https
+  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+  sudo apt update
+  sudo apt install -y kubelet kubeadm kubectl
 }

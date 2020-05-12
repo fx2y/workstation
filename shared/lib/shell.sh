@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
+shared_setup_etc_hosts() {
+  sudo mv /etc/hosts /etc/hosts.backup
+  wget -qO - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts | sudo tee /etc/hosts >/dev/null
+  cmd </etc/hosts.backup | sudo tee -a /etc/hosts >/dev/null
+}
+
 shared_setup_tools() {
   wget -qO ~/.curlrc https://raw.githubusercontent.com/drduh/config/master/curlrc
   wget -qO ~/.tmux.conf https://raw.githubusercontent.com/drduh/config/master/tmux.conf
   wget -qO ~/.vimrc https://raw.githubusercontent.com/drduh/config/master/vimrc
-}
-
-shared_setup_etc_hosts() {
-  sudo mv /etc/hosts /etc/hosts.backup
-  wget -qO - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts | sudo tee /etc/hosts >/dev/null
-  cat /etc/hosts.backup | sudo tee -a /etc/hosts >/dev/null
 }
 
 shared_setup_ssh() {
@@ -29,15 +29,6 @@ shared_setup_sshd() {
   sudo chmod 0600 /etc/ssh/ssh_host_key
   wget -qO - https://raw.githubusercontent.com/drduh/config/master/sshd_config | sudo tee /etc/ssh/sshd_config >/dev/null
   sudo systemctl restart ssh
-}
-
-# source: https://docs.conda.io/en/latest/miniconda.html
-shared_setup_conda() {
-  CONDA_OS=${1:-"Linux"}
-  wget -qO /tmp/conda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-"$CONDA_OS"-x86_64.sh
-  (cd /tmp && bash conda.sh -b && ~/miniconda3/bin/conda init)
-  echo "export PATH=\"\$HOME/miniconda3/bin:\$PATH\"" >>~/.bash_profile.local
-  export PATH="$HOME/miniconda3/bin:$PATH"
 }
 
 # source: https://github.com/Bash-it/bash-it
@@ -119,35 +110,4 @@ shared_setup_doom_emacs() {
   vi ~/.doom.d/init.el
   ~/.emacs.d/bin/doom upgrade
   echo "export PATH=\"\$HOME/.emacs.d/bin:\$PATH\"" >>~/.bash_profile.local
-}
-
-# source: https://asdf-vm.com/#/core-manage-asdf-vm
-shared_setup_asdf() {
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.8
-  echo ". \"\$HOME/.asdf/asdf.sh\"" >>~/.bash_profile.local
-  echo ". \"\$HOME/.asdf/completions/asdf.bash\"" >>~/.bash_profile.local
-  # shellcheck source=$HOME/.asdf/asdf.sh
-  . "$HOME/.asdf/asdf.sh"
-
-  asdf plugin add nodejs
-  bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
-  asdf list all nodejs
-  echo "Read NodeJS Version"
-  read -r ASDF_NODEJS
-  asdf install nodejs "$ASDF_NODEJS"
-  asdf global nodejs "$ASDF_NODEJS"
-
-  asdf plugin add golang
-  asdf list all golang
-  echo "Read Golang Version"
-  read -r ASDF_GOLANG
-  asdf install golang "$ASDF_GOLANG"
-  asdf global golang "$ASDF_GOLANG"
-}
-
-# source: https://rustup.rs
-shared_setup_rustup() {
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path --default-toolchain beta --quiet -y
-  echo "export PATH=\"\$HOME/.cargo/bin:\$PATH\"" >>~/.bash_profile.local
-  export PATH="$HOME/.cargo/bin:$PATH"
 }
