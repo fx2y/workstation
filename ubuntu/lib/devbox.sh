@@ -28,12 +28,28 @@ setup_asdf() {
 # source: https://github.com/asdf-vm/asdf-erlang
 # source: https://github.com/asdf-vm/asdf-elixir
 setup_elixir() {
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6856E1DB1AC82609
+  sudo apt-add-repository 'deb https://repos.codelite.org/wx3.1.3/ubuntu/ eoan universe'
+  sudo apt update -y
   sudo apt install -y \
-    build-essential autoconf m4 libncurses5-dev libwxgtk3.0-gtk3-dev \
+    build-essential autoconf m4 libncurses5-dev \
     libgl1-mesa-dev libglu1-mesa-dev libpng-dev libssh-dev unixodbc-dev \
-    xsltproc fop
+    xsltproc fop libwxbase3.1-0-unofficial3 \
+    libwxbase3.1unofficial3-dev \
+    libwxgtk3.1-0-unofficial3 \
+    libwxgtk3.1unofficial3-dev \
+    wx3.1-headers \
+    wx-common
   export KERL_CONFIGURE_OPTIONS="--disable-debug --without-javac"
   shared_setup_elixir
+}
+
+update_elixir() {
+  export KERL_CONFIGURE_OPTIONS="--disable-debug --without-javac"
+  util_update_asdf erlang
+  util_update_asdf elixir
+  util_delete_asdf erlang
+  util_delete_asdf elixir
 }
 
 setup_jetbrains() {

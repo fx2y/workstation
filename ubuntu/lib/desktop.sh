@@ -4,6 +4,17 @@ setup_desktop() {
   setup_brave
   setup_gnome
   setup_font
+
+  sudo apt install -y fbreader
+}
+
+setup_sound_wire() {
+  sudo apt install -y pavucontrol libportaudio2 libqt5widgets5
+  (cd /tmp && wget -q http://georgielabs.altervista.org/SoundWire_Server_linux64.tar.gz && tar -xvzf SoundWire_Server_linux64.tar.gz && rm SoundWire_Server_linux64.tar.gz)
+  mkdir -p ~/opt/bin && mkdir -p ~/.local/share/icons
+  (cd /tmp/SoundWireServer && mv SoundWireServer ~/opt/bin && mv sw-icon.xpm ~/.local/share/icons && sudo mv SoundWire-Server.desktop /usr/share/applications && sudo chmod 644 /usr/share/applications/SoundWire-Server.desktop && cd /tmp && rm -rf SoundWireServer)
+  SoundWireServer
+  read -r
 }
 
 setup_brave() {

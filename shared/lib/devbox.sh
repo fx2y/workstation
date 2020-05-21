@@ -46,9 +46,20 @@ shared_setup_elixir() {
 util_setup_asdf() {
   asdf plugin add "$1"
   ${2}
+  util_update_asdf "$1"
+}
+
+util_update_asdf() {
   asdf list all "$1"
-  echo "Read $1 Version:"
+  echo "Read New $1 Version:"
   read -r ASDF_VERSION
   asdf install "$1" "$ASDF_VERSION"
   asdf global "$1" "$ASDF_VERSION"
+}
+
+util_delete_asdf() {
+  asdf list "$1"
+  echo "Read Old $1 Version:"
+  read -r ASDF_VERSION
+  asdf uninstall "$1" "$ASDF_VERSION"
 }
