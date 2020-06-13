@@ -14,7 +14,9 @@ shared_setup_tools() {
 
 shared_setup_ssh() {
   mkdir -p ~/.ssh
+  chmod 700 ~/.ssh
   wget -qO ~/.ssh/config https://raw.githubusercontent.com/drduh/config/master/ssh_config
+  chmod 644 ~/.ssh/config
 }
 
 shared_setup_ssh_access() {
@@ -75,15 +77,20 @@ shared_setup_gnupg() {
   echo "Unmount Backup Disk"
   read -r
   gpg --list-secret-keys
-  gpg --expert --edit-key "$KEYID" # trust; 5 = I trust ultimately; quit
+  gpg --expert --edit-key "$KEYID" # trust; 5 = I trust ultimately; passwd; quit
+  
   gpg -k --with-keygrip
   echo "Read AuthID"
   read -r AUTHID
   echo "$AUTHID" >"$HOME"/.gnupg/sshcontrol
+
   gpg --output ~/.ssh/github --export-ssh-key "$KEYID"
+  chmod 644 ~/.ssh/github
+  ssh-add -L
+
   echo "Enable Internet Connection and Mount Backup Disk"
   read -r
-  ssh-add -L
+
   ssh git@github.com -vvv
 }
 
