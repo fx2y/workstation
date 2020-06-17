@@ -54,12 +54,12 @@ update_elixir() {
 }
 
 setup_jetbrains() {
-	JETBRAINS_VERSION=1.17.6856
+	JETBRAINS_VERSION=1.17.7018
 	(cd /tmp && wget -qO jetbrains-toolbox.tar.gz https://download.jetbrains.com/toolbox/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz && tar -xvzf jetbrains-toolbox.tar.gz && rm jetbrains-toolbox.tar.gz)
-	mkdir -p ~/opt/bin
-	(cd /tmp && mv jetbrains-toolbox-"$JETBRAINS_VERSION"/jetbrain-toolbox ~/opt/bin && rm -rf jetbrains-toolbox-"$JETBRAINS_VERSION")
-	echo "export PATH=\"\$HOME/opt/bin:\$PATH\"" >>~/.bash_profile.local
-	export PATH="$HOME/opt/bin:$PATH"
+	#mkdir -p ~/opt/bin
+	(cd /tmp && mv jetbrains-toolbox-"$JETBRAINS_VERSION"/jetbrain-toolbox ~/.local/bin && rm -rf jetbrains-toolbox-"$JETBRAINS_VERSION")
+	#echo "export PATH=\"\$HOME/opt/bin:\$PATH\"" >>~/.bash_profile.local
+	#export PATH="$HOME/opt/bin:$PATH"
 	jetbrains-toolbox
 	read -r
 }
