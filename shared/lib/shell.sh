@@ -13,10 +13,12 @@ shared_setup_tools() {
 }
 
 shared_setup_ssh() {
+  chmod go-w ~
   mkdir -p ~/.ssh
   chmod 700 ~/.ssh
   wget -qO ~/.ssh/config https://raw.githubusercontent.com/drduh/config/master/ssh_config
-  chmod 644 ~/.ssh/config
+  chmod 600 ~/.ssh/*
+  chown -R "$USER" ~/.ssh
 }
 
 shared_setup_ssh_access() {
@@ -86,7 +88,7 @@ shared_setup_gnupg() {
   echo "$AUTHID" >"$HOME"/.gnupg/sshcontrol
 
   gpg --output ~/.ssh/github --export-ssh-key "$KEYID"
-  chmod 644 ~/.ssh/github
+  chmod 600 ~/.ssh/github
   ssh-add -L
 
   echo "Enable Internet Connection and Mount Backup Disk"
