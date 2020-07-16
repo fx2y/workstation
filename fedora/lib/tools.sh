@@ -5,7 +5,8 @@
 setup_tools() {
   sudo dnf install -y \
     vim-enhanced \
-    podman-docker
+    podman-docker \
+    podman-compose
   shared_setup_tools
   shared_setup_ssh
   shared_setup_gnupg
@@ -23,4 +24,5 @@ no-cgroups = true
 EOF
   read -r
   docker run -it --rm --security-opt=label=disable nvidia/cuda:10.2-base nvidia-smi
+
 }
