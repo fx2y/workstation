@@ -52,6 +52,7 @@ shared_setup_gnupg() {
   gpg -k
   wget -qO ~/.gnupg/gpg.conf https://raw.githubusercontent.com/drduh/config/master/gpg.conf
   wget -qO ~/.gnupg/gpg-agent.conf https://raw.githubusercontent.com/drduh/config/master/gpg-agent.conf
+  vi ~/.gnupg/gpg-agent.conf
   shared_setup_ssh
   {
     echo "export GPG_TTY=\"\$(tty)\""
