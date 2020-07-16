@@ -112,6 +112,8 @@ EOF
   read -r USERNAME
   git config --global user.email "$USEREMAIL"
   git config --global user.name "$USERNAME"
+  wget -qO ~/.gitignore_global https://www.toptal.com/developers/gitignore/api/intellij+all,emacs,linux,macos
+  git config --global core.excludesfile ~/.gitignore_global
 }
 
 # source: https://github.com/hlissner/doom-emacs/blob/develop/docs/getting_started.org
