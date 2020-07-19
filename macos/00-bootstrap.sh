@@ -22,12 +22,12 @@ sudo pkill -HUP socketfilterfw
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.captive.control.plist Active -bool false
 
 TMP1b="$(
-  defaults read com.apple.Spotlight.plist orderedItems |
-    awk '/^ {8}/{printf$0}!/^ {8}/{print}'
+	defaults read com.apple.Spotlight.plist orderedItems |
+		awk '/^ {8}/{printf$0}!/^ {8}/{print}'
 )"
 TMP2b="$(
-  echo "$TMP1b" |
-    sed '
+	echo "$TMP1b" |
+		sed '
          s|\(.*\)= 1\(.*MENU_SPOTLIGHT_SUGGESTIONS.*\)|\1= 0\2|;
          s|\(.*\)= 1\(.*MENU_DEFINITION.*\)|\1= 0\2|;
          s|\(.*\)= 1\(.*MENU_CONVERSION.*\)|\1= 0\2|;

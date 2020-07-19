@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. functions.sh
 . ../shared/runtime.sh
+. functions.sh
 
-setup_doom_emacs
+setup_docker

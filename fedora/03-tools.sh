@@ -3,4 +3,4 @@
 . functions.sh
 . ../shared/runtime.sh
 
-setup_doom_emacs
+setup_tools

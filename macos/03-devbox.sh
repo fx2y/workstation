@@ -29,11 +29,11 @@ mkdir -p ~/.ssh
 curl -o ~/.ssh/config https://raw.githubusercontent.com/drduh/config/master/ssh_config
 
 {
-  # shellcheck disable=SC2016
-  echo 'export GPG_TTY="$(tty)"'
-  # shellcheck disable=SC2016
-  echo 'export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)'
-  echo 'gpgconf --launch gpg-agent'
+	# shellcheck disable=SC2016
+	echo 'export GPG_TTY="$(tty)"'
+	# shellcheck disable=SC2016
+	echo 'export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)'
+	echo 'gpgconf --launch gpg-agent'
 } >>~/.bash_profile.local
 GPG_TTY="$(tty)"
 export GPG_TTY

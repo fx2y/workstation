@@ -9,8 +9,8 @@ Mirror=${Mirror:-"deb.debian.org"}
 echo "Input OS Version Codename:"
 read CodeName
 CodeName=${CodeName:-$(
-  . /etc/os-release
-  echo $VERSION_CODENAME
+	. /etc/os-release
+	echo $VERSION_CODENAME
 )}
 
 cat <<EOF | sudo tee /etc/apt/sources.list >/dev/null

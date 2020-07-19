@@ -4,10 +4,10 @@
 
 sudo apt-get update
 sudo apt-get install -y \
-  emacs \
-  fonts-firacode \
-  git \
-  rsync
+	emacs \
+	fonts-firacode \
+	git \
+	rsync
 
 git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
 ~/.bash-it/install.sh --silent

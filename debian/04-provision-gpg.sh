@@ -4,9 +4,9 @@
 
 sudo apt-get update
 sudo apt-get install -y \
-  gnupg2 \
-  gnupg-agent \
-  openssh-client
+	gnupg2 \
+	gnupg-agent \
+	openssh-client
 
 echo "Disable your network connection."
 read

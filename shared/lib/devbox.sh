@@ -17,15 +17,15 @@ EOF
 # source: https://rustup.rs
 shared_setup_rustup() {
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path --default-toolchain beta --quiet -y
-	echo "export PATH=\"\$HOME/.cargo/bin:\$PATH\"" >>~/.bash_profile.local
+	echo 'export PATH="$HOME/.cargo/bin:$PATH"' >>~/.bash_profile.local
 	export PATH="$HOME/.cargo/bin:$PATH"
 }
 
 # source: https://asdf-vm.com/#/core-manage-asdf-vm
 shared_setup_asdf() {
 	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.8
-	echo ". \"\$HOME/.asdf/asdf.sh\"" >>~/.bash_profile.local
-	echo ". \"\$HOME/.asdf/completions/asdf.bash\"" >>~/.bash_profile.local
+	echo '. "$HOME/.asdf/asdf.sh"' >>~/.bash_profile.local
+	echo '. "$HOME/.asdf/completions/asdf.bash"' >>~/.bash_profile.local
 	# shellcheck source=$HOME/.asdf/asdf.sh
 	. "$HOME/.asdf/asdf.sh"
 }

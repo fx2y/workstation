@@ -14,7 +14,8 @@ setup_lang_go() {
 
 	sudo dnf install -y nodejs golang-x-tools-gopls
 	GO111MODULE=on go get github.com/go-delve/delve/cmd/dlv
-	echo "export PATH=\"\$PATH:\$HOME/go/bin/\"" >>~/.bashrc
+	echo 'export GOPATH="$HOME/go"' >>~/.bashrc
+	echo 'export PATH="$PATH:$GOPATH/bin/"' >>~/.bashrc
 	export PATH="$PATH:$HOME/go/bin/"
 }
 
@@ -22,7 +23,7 @@ setup_lang_javascript() {
 	sudo dnf install -y npm
 	mkdir -p ~/node
 	(cd ~/node && npm init -y)
-	echo "export PATH=\"\$PATH:\$HOME/node/node_modules/.bin\"" >>~/.bashrc
+	echo 'export PATH="$PATH:$HOME/node/node_modules/.bin"' >>~/.bashrc
 	(
 		cd ~/node/
 		npm install prettier \
@@ -80,9 +81,9 @@ setup_lang_python() {
 	# pyenv
 	curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 	{
-		echo "export PATH=\"\$HOME/.pyenv/bin:\$PATH\""
-		echo "eval \"\$(pyenv init -)\""
-		echo "eval \"\$(pyenv virtualenv-init -)\""
+		echo 'export PATH="$HOME/.pyenv/bin:$PATH"'
+		echo 'eval "$(pyenv init -)"'
+		echo 'eval "$(pyenv virtualenv-init -)"'
 	} >>~/.bashrc
 	export PATH="$HOME/.pyenv/bin:$PATH"
 	eval "$(pyenv init -)"
@@ -122,10 +123,10 @@ setup_lang_ruby() {
 	)
 	# rbenv
 	(
-		echo "export PATH=\"\$PATH:\$HOME/.rbenv/bin\"" >>~/.bashrc
+		echo 'export PATH="$PATH:$HOME/.rbenv/bin"' >>~/.bashrc
 		export PATH="$PATH:$HOME/.rbenv/bin"
 		curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
-		echo "eval \"\$(rbenv init -)\"" >>~/.bashrc
+		echo 'eval "$(rbenv init -)"' >>~/.bashrc
 		eval "$(rbenv init -)"
 		curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
 	)

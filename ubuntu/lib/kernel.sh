@@ -3,32 +3,32 @@
 . ../shared/functions.sh
 
 setup_kernel() {
-  optim_kernel
-  optim_net_kernel
-  optim_vm_kernel
-  optim_dev_kernel
-  optim_misc_kernel
+	optim_kernel
+	optim_net_kernel
+	optim_vm_kernel
+	optim_dev_kernel
+	optim_misc_kernel
 }
 
 optim_kernel() {
-  sudo apt install -y lz4
+	sudo apt install -y lz4
 
-  GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=20 zswap.zpool=z3fold"
-  GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT mitigations=off"
-  GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT nowatchdog"
-  GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT libahci.ignore_sss=1"
-  GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT quiet loglevel=3 rd.systemd.show_status=auto rd.udev.log_priority=3"
+	GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=20 zswap.zpool=z3fold"
+	GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT mitigations=off"
+	GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT nowatchdog"
+	GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT libahci.ignore_sss=1"
+	GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT quiet loglevel=3 rd.systemd.show_status=auto rd.udev.log_priority=3"
 
-  set_config /etc/default/grub GRUB_CMDLINE_LINUX_DEFAULT "\"${GRUB_CMDLINE_LINUX_DEFAULT}\""
-  set_config /etc/default/grub GRUB_TIMEOUT 0
-  set_config /etc/default/grub GRUB_RECORDFAIL_TIMEOUT 0
+	set_config /etc/default/grub GRUB_CMDLINE_LINUX_DEFAULT "\"${GRUB_CMDLINE_LINUX_DEFAULT}\""
+	set_config /etc/default/grub GRUB_TIMEOUT 0
+	set_config /etc/default/grub GRUB_RECORDFAIL_TIMEOUT 0
 
-  sudo update-grub
+	sudo update-grub
 }
 
 # https://wiki.archlinux.org/index.php/Sysctl#Improving_performance
 optim_net_kernel() {
-  cat <<EOF | sudo tee /etc/sysctl.d/99-optim-net.conf >/dev/null
+	cat <<EOF | sudo tee /etc/sysctl.d/99-optim-net.conf >/dev/null
 # Increasing the size of the receive queue.
 net.core.netdev_max_backlog = 16384
 
@@ -103,12 +103,12 @@ net.ipv4.conf.default.send_redirects = 0
 #net.ipv4.ping_group_range = 0 65535
 EOF
 
-  cat <<EOF | sudo tee /etc/udev/rules.d/10-network.rules >/dev/null
+	cat <<EOF | sudo tee /etc/udev/rules.d/10-network.rules >/dev/null
 ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", ATTR{mtu}="1500", ATTR{tx_queue_len}="2000"
 EOF
 
-  sudo mkdir -p /etc/modules-load.d
-  cat <<EOF | sudo tee /etc/modules-load.d/99-optim-net.conf >/dev/null
+	sudo mkdir -p /etc/modules-load.d
+	cat <<EOF | sudo tee /etc/modules-load.d/99-optim-net.conf >/dev/null
 br_netfilter
 tcp_bbr
 EOF
@@ -116,7 +116,7 @@ EOF
 
 # https://wiki.archlinux.org/index.php/Sysctl#Virtual_memory
 optim_vm_kernel() {
-  cat <<EOF | sudo tee /etc/sysctl.d/99-optim-vm.conf >/dev/null
+	cat <<EOF | sudo tee /etc/sysctl.d/99-optim-vm.conf >/dev/null
 # (WARN) Virtual memory
 #vm.dirty_ratio = 10
 #vm.dirty_background_ratio = 5
@@ -133,16 +133,16 @@ EOF
 }
 
 optim_dev_kernel() {
-  cat <<EOF | sudo tee /etc/sysctl.d/99-optim-dev.conf >/dev/null
+	cat <<EOF | sudo tee /etc/sysctl.d/99-optim-dev.conf >/dev/null
 dev.raid.speed_limit_max = 10000
 dev.raid.speed_limit_min = 1000
 EOF
 
-  cat <<EOF | sudo tee /etc/modules-load.d/99-optim-dev.conf >/dev/null
+	cat <<EOF | sudo tee /etc/modules-load.d/99-optim-dev.conf >/dev/null
 md_mod
 EOF
 
-  cat <<EOF | sudo tee -a /etc/fstab >/dev/null
+	cat <<EOF | sudo tee -a /etc/fstab >/dev/null
 tmpfs   /tmp         tmpfs  noatime,rw,nodev,nosuid,size=16G    0   0
 tmpfs   /var/lock    tmpfs  noatime,rw,nodev,nosuid,size=16G    0   0
 tmpfs   /var/run     tmpfs  noatime,rw,nodev,nosuid,size=16G    0   0
@@ -150,7 +150,7 @@ EOF
 }
 
 optim_misc_kernel() {
-  cat <<EOF | sudo tee /etc/sysctl.d/99-optim-misc.conf >/dev/null
+	cat <<EOF | sudo tee /etc/sysctl.d/99-optim-misc.conf >/dev/null
 kernel.printk = 3 3 3 3
 EOF
 }

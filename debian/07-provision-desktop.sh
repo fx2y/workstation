@@ -5,8 +5,8 @@
 # Prerequisites
 sudo apt-get update
 sudo apt-get install -y \
-  gnome-core \
-  wget
+	gnome-core \
+	wget
 
 # Firefox Beta
 sudo apt-get install -y wget

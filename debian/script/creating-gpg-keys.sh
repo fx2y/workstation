@@ -4,8 +4,8 @@
 
 sudo apt-get update
 sudo apt-get install -y \
-  gnupg2 \
-  secure-delete
+	gnupg2 \
+	secure-delete
 
 export GNUPGHOME=$(mktemp -d)
 

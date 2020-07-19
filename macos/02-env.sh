@@ -4,36 +4,36 @@ set -euxo pipefail
 
 # bash-it
 if [ ! -d ~/.bash_it ]; then
-  git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
-  ~/.bash_it/install.sh --silent
-  touch ~/.bash_profile.local
-  echo '. ~/.bash_profile.local' >>~/.bash_profile
+	git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+	~/.bash_it/install.sh --silent
+	touch ~/.bash_profile.local
+	echo '. ~/.bash_profile.local' >>~/.bash_profile
 fi
 
 /usr/local/opt/openssl@1.1/bin/c_rehash
 {
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"'
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"'
-  # shellcheck disable=SC2016
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"'
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"'
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/curl/bin:$PATH"'
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"'
-  # shellcheck disable=SC2016
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/libxslt/bin:$PATH"'
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/sqlite/bin:$PATH"'
-  # shellcheck disable=SC2016
-  echo 'export PATH="/usr/local/opt/unzip/bin:$PATH"'
-  echo -e "\n. $(brew --prefix asdf)/asdf.sh"
-  echo -e "\n. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"'
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"'
+	# shellcheck disable=SC2016
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"'
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"'
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/curl/bin:$PATH"'
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"'
+	# shellcheck disable=SC2016
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/libxslt/bin:$PATH"'
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/sqlite/bin:$PATH"'
+	# shellcheck disable=SC2016
+	echo 'export PATH="/usr/local/opt/unzip/bin:$PATH"'
+	echo -e "\n. $(brew --prefix asdf)/asdf.sh"
+	echo -e "\n. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
 } >>~/.bash_profile.local
 
 # dnscrypt-proxy

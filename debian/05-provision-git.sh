@@ -4,9 +4,9 @@
 
 sudo apt update
 sudo apt install -y \
-  git \
-  hub \
-  icdiff
+	git \
+	hub \
+	icdiff
 
 cat <<EOF | tee ~/.gitconfig >/dev/null
 [alias]
