@@ -2,21 +2,21 @@
 
 shared_setup_etc_hosts() {
 	sudo mv /etc/hosts /etc/hosts.backup
-	wget -qO - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts | sudo tee /etc/hosts >/dev/null
+	curl -Lo - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts | sudo tee /etc/hosts >/dev/null
 	cat </etc/hosts.backup | sudo tee -a /etc/hosts >/dev/null
 }
 
 shared_setup_tools() {
-	wget -qO ~/.curlrc https://raw.githubusercontent.com/drduh/config/master/curlrc
-	wget -qO ~/.tmux.conf https://raw.githubusercontent.com/drduh/config/master/tmux.conf
-	wget -qO ~/.vimrc https://raw.githubusercontent.com/drduh/config/master/vimrc
+	curl -Lo ~/.curlrc https://raw.githubusercontent.com/drduh/config/master/curlrc
+	curl -Lo ~/.tmux.conf https://raw.githubusercontent.com/drduh/config/master/tmux.conf
+	curl -Lo ~/.vimrc https://raw.githubusercontent.com/drduh/config/master/vimrc
 }
 
 shared_setup_ssh() {
 	chmod go-w ~
 	mkdir -p ~/.ssh
 	chmod 700 ~/.ssh
-	wget -qO ~/.ssh/config https://raw.githubusercontent.com/drduh/config/master/ssh_config
+	curl -Lo ~/.ssh/config https://raw.githubusercontent.com/drduh/config/master/ssh_config
 	chmod 600 ~/.ssh/*
 	chown -R "$USER" ~/.ssh
 }
@@ -31,7 +31,7 @@ shared_setup_sshd() {
 	sudo mv /tmp/ssh_host_key /tmp/ssh_host_key.pub /etc/ssh/
 	sudo chown root:root /etc/ssh/ssh_host_key /etc/ssh/ssh_host_key.pub
 	sudo chmod 0600 /etc/ssh/ssh_host_key
-	wget -qO - https://raw.githubusercontent.com/drduh/config/master/sshd_config | sudo tee /etc/ssh/sshd_config >/dev/null
+	curl -Lo - https://raw.githubusercontent.com/drduh/config/master/sshd_config | sudo tee /etc/ssh/sshd_config >/dev/null
 	sudo systemctl restart ssh
 }
 
@@ -54,8 +54,8 @@ EOF
 
 shared_setup_gnupg() {
 	gpg -k
-	wget -qO ~/.gnupg/gpg.conf https://raw.githubusercontent.com/drduh/config/master/gpg.conf
-	wget -qO ~/.gnupg/gpg-agent.conf https://raw.githubusercontent.com/drduh/config/master/gpg-agent.conf
+	curl -Lo ~/.gnupg/gpg.conf https://raw.githubusercontent.com/drduh/config/master/gpg.conf
+	curl -Lo ~/.gnupg/gpg-agent.conf https://raw.githubusercontent.com/drduh/config/master/gpg-agent.conf
 	vi ~/.gnupg/gpg-agent.conf
 	shared_setup_ssh
 	{
@@ -100,7 +100,7 @@ shared_setup_gnupg() {
 }
 
 shared_setup_git() {
-	wget -qO ~/.gitconfig https://gist.githubusercontent.com/scottnonnenberg/fefa3f65fdb3715d25882f3023b31c29/raw/d7a219e40eb9a3e208f783185eeb01a55604f30f/.gitconfig
+	curl -Lo ~/.gitconfig https://gist.githubusercontent.com/scottnonnenberg/fefa3f65fdb3715d25882f3023b31c29/raw/d7a219e40eb9a3e208f783185eeb01a55604f30f/.gitconfig
 	cat <<EOF >>~/.gitconfig
 
 [branch "master"]
@@ -114,7 +114,7 @@ EOF
 	read -r USERNAME
 	git config --global user.email "$USEREMAIL"
 	git config --global user.name "$USERNAME"
-	wget -qO ~/.gitignore_global https://www.toptal.com/developers/gitignore/api/intellij+all,emacs,linux,macos
+	curl -Lo ~/.gitignore_global https://www.toptal.com/developers/gitignore/api/intellij+all,emacs,linux,macos
 	git config --global core.excludesfile ~/.gitignore_global
 }
 

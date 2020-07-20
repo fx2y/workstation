@@ -5,3 +5,4 @@
 . ./lib/desktop.sh
 . ./lib/tools.sh
 . ./lib/emacs.sh
+. ./lib/cache-dnf.sh

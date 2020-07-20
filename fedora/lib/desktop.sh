@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 setup_desktop() {
+	sudo dnf install -y brave-browser-beta
 	setup_gsettings
 	setup_firefox
-	setup_brave
 	setup_font
 	setup_droidcam
 }
@@ -16,7 +16,7 @@ setup_firefox() {
 		curl -sSLo updater.sh https://raw.githubusercontent.com/ghacksuserjs/ghacks-user.js/master/updater.sh
 		touch user-overrides.js
 		bash updater.sh -s -u -b
-		wget https://12bytes.org/wp-content/downloads/search.json.mozlz4.zip
+		curl -LO https://12bytes.org/wp-content/downloads/search.json.mozlz4.zip
 		mv search.json.mozlz4 search.json.mozlz4.backup
 		unzip search.json.mozlz4.zip
 		rm search.json.mozlz4.zip
@@ -27,16 +27,7 @@ setup_firefox() {
 	read -r
 }
 
-# https://brave-browser.readthedocs.io/en/latest/installing-brave.html
-setup_brave() {
-	sudo dnf install -y dnf-plugins-core
-	sudo dnf config-manager --add-repo https://brave-browser-rpm-beta.s3.brave.com/x86_64/
-	sudo rpm --import https://brave-browser-rpm-beta.s3.brave.com/brave-core-nightly.asc
-	sudo dnf install -y brave-browser-beta
-}
-
 setup_gsettings() {
-	sudo dnf install -y gnome-tweaks
 	# Disable Animation
 	gsettings set org.gnome.desktop.interface enable-animations false
 	# Night Light
@@ -49,17 +40,13 @@ setup_gsettings() {
 	gsettings set org.gnome.settings-daemon.plugins.xsettings hinting 'slight'
 	gsettings set org.gnome.settings-daemon.plugins.xsettings antialiasing 'rgba'
 	gsettings set org.gnome.desktop.interface text-scaling-factor 1.5
-	gsettings set org.gnome.desktop.interface font-name 'Open Sans 10'
-	gsettings set org.gnome.desktop.interface document-font-name 'Source Serif Pro 11'
-	gsettings set org.gnome.desktop.interface monospace-font-name 'IBM Plex Mono 13'
-	gsettings get org.gnome.desktop.wm.preferences titlebar-font 'Open Sans 11'
 }
 
 setup_jetbrains() {
 	JETBRAINS_VERSION=1.17.7234
 	(
 		cd /tmp || exit
-		wget -qO jetbrains-toolbox.tar.gz https://download.jetbrains.com/toolbox/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz
+		curl -Lo jetbrains-toolbox.tar.gz https://download.jetbrains.com/toolbox/jetbrains-toolbox-"$JETBRAINS_VERSION".tar.gz
 		tar -xvzf jetbrains-toolbox.tar.gz
 		rm jetbrains-toolbox.tar.gz
 		mkdir -p ~/.local/bin
@@ -69,6 +56,53 @@ setup_jetbrains() {
 		rm -rf jetbrains-toolbox-"$JETBRAINS_VERSION"
 	)
 	jetbrains-toolbox
+	cat <<EOF >~/.ideavimrc
+""" Map leader to space ---------------------
+let mapleader=" "
+
+""" Plugins  --------------------------------
+set surround
+set multiple-cursors
+set commentary
+set argtextobj
+set easymotion
+set textobj-entire
+set ReplaceWithRegister
+
+""" Plugin settings -------------------------
+let g:argtextobj_pairs="[:],(:),<:>"
+
+""" Common settings -------------------------
+set showmode
+set so=5
+set incsearch
+set nu
+
+""" Idea specific settings ------------------
+set ideajoin
+set ideastatusicon=gray
+set idearefactormode=keep
+
+""" Mappings --------------------------------
+map <leader>f <Plug>(easymotion-s)
+map <leader>e <Plug>(easymotion-f)
+
+map <leader>d :action Debug<CR>
+map <leader>r :action RenameElement<CR>
+map <leader>c :action Stop<CR>
+map <leader>z :action ToggleDistractionFreeMode<CR>
+
+map <leader>s :action SelectInProjectView<CR>
+map <leader>a :action Annotate<CR>
+map <leader>h :action Vcs.ShowTabbedFileHistory<CR>
+map <S-Space> :action GotoNextError<CR>
+
+map <leader>b :action ToggleLineBreakpoint<CR>
+map <leader>o :action FileStructurePopup<CR>
+
+" Map \r to the Reformat Code action
+:map \r :action ReformatCode<CR>
+EOF
 	read -r
 }
 
@@ -107,14 +141,19 @@ setup_font() {
 </fontconfig>
 EOF
 	sudo fc-cache -f
+	gsettings set org.gnome.desktop.interface font-name 'Open Sans 10'
+	gsettings set org.gnome.desktop.interface document-font-name 'Source Serif Pro 11'
+	gsettings set org.gnome.desktop.interface monospace-font-name 'IBM Plex Mono 13'
+	gsettings set org.gnome.desktop.wm.preferences titlebar-font 'Open Sans 11'
+
 }
 
 # https://support.zoom.us/hc/en-us/articles/204206269-Installing-or-updating-Zoom-on-Linux#h_825b50ac-ad15-44a8-9959-28c97e4803ef
 setup_zoom() {
 	(
-		cd /tmp/
-		wget -q https://d11yldzmag5yn.cloudfront.net/prod/5.1.422789.0705/zoom_x86_64.rpm
-		wget -qO package-signing-key.pub https://zoom.us/linux/download/pubkey
+		cd /tmp/ || exit
+		curl -LO https://d11yldzmag5yn.cloudfront.net/prod/5.1.422789.0705/zoom_x86_64.rpm
+		curl -Lo package-signing-key.pub https://zoom.us/linux/download/pubkey
 		sudo rpm --import package-signing-key.pub
 		sudo dnf localinstall -y zoom_x86_64.rpm
 		rm zoom_x86_64.rpm package-signing-key.pub
@@ -124,13 +163,13 @@ setup_zoom() {
 # https://www.dev47apps.com/droidcam/linux/
 setup_droidcam() {
 	(
-		cd /tmp/
-		wget https://files.dev47apps.net/linux/droidcam_latest.zip
+		cd /tmp/ || exit
+		curl -LO https://files.dev47apps.net/linux/droidcam_latest.zip
 		echo "73db3a4c0f52a285b6ac1f8c43d5b4c7 droidcam_latest.zip" | md5sum -c --
-		unzip droidcam_latest.zip -d droidcam && cd droidcam
+		unzip droidcam_latest.zip -d droidcam && cd droidcam || exit
 		sudo ./install
 		lsmod | grep v4l2loopback_dc
-		cd /tmp
+		cd /tmp || exit
 		rm -rf droidcamp_latest.zip droidcam
 	)
 }
