@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 
 setup_desktop() {
-	sudo dnf install -y brave-browser-beta
+	sudo dnf install -y \
+		chrome-gnome-shell \
+		brave-browser-beta \
+		xournalpp
 	setup_gsettings
 	setup_firefox
 	setup_font
 	setup_droidcam
+	setup_zoom
+	setup_ding_wine
 }
 
 setup_firefox() {
@@ -40,6 +45,11 @@ setup_gsettings() {
 	gsettings set org.gnome.settings-daemon.plugins.xsettings hinting 'slight'
 	gsettings set org.gnome.settings-daemon.plugins.xsettings antialiasing 'rgba'
 	gsettings set org.gnome.desktop.interface text-scaling-factor 1.5
+	echo "Configuring Xorg as the default GNOME session"
+	echo "# sudo vi /etc/gdm/custom.conf"
+	echo "# Uncomment ~WaylandEnable=false~"
+	echo "# Add the following line to ~[daemon]~ ~DefaultSession=gnome-xorg.desktop~"
+	read -r
 }
 
 setup_jetbrains() {
@@ -171,5 +181,14 @@ setup_droidcam() {
 		lsmod | grep v4l2loopback_dc
 		cd /tmp || exit
 		rm -rf droidcamp_latest.zip droidcam
+	)
+}
+
+setup_ding_wine() {
+	sudo dnf install -y wine
+	(
+		cd /tmp/ || exit
+		curl -Lo DingTalkLite.exe https://dtapp-pub.dingtalk.com/dingtalk-desktop/dingtalk_lite/Release/DingTalkLite_v5.1.9.504.exe
+		wine DingTalkLite.exe
 	)
 }

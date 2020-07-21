@@ -39,7 +39,7 @@ presetup_docker() {
 }
 
 setup_docker() {
-	sudo dnf install -y moby-engine docker-compose podman podman-compose slirp4netns
+	sudo dnf install -y moby-engine docker-compose podman podman-compose
 	sudo systemctl enable --now docker
 	sudo usermod -aG docker $USER
 }
@@ -48,9 +48,6 @@ setup_nvidia_docker() {
 	docker run -it --rm hello-world
 	podman run -it --rm docker.io/hello-world
 
-	curl -s -L https://nvidia.github.io/nvidia-docker/centos8/nvidia-docker.repo |
-		sudo tee /etc/yum.repos.d/nvidia-docker.repo
-	sudo dnf update -y
 	sudo dnf install -y nvidia-container-toolkit
 	cat <<EOF
 # /etc/nvidia-container-runtime/config.toml
